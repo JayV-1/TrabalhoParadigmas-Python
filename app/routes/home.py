@@ -1,5 +1,7 @@
 from app import app
 from flask import render_template, request
+
+from app.firestore.firestoreInit import db
 from app.utils.utilities import check_fields
 
 # rota home - primeiro carregamento do app
@@ -11,6 +13,10 @@ def home():
             "hobbie": ""
         },
     ]
+
+    doc_ref = db.collection("users").document("alovelace")
+    doc_ref.set({"first": "Ada", "last": "Lovelace", "born": 1815})
+
     return render_template('index.html', user=user)
 
 
