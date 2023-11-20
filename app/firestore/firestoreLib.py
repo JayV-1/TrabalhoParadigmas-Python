@@ -1,12 +1,15 @@
 from google.cloud.firestore_v1 import FieldFilter
+import uuid
 
-from app.firestore.firestoreInit import db, usersCollection
+from app.firestore.firestoreInit import usersCollection
 
 
 def uploadUser(name, password, hobbie):
     try:
-        doc_ref = usersCollection.document("users")
+        user_id = str(uuid.uuid4())
+        doc_ref = usersCollection.document(user_id)
         doc_ref.set({
+            "documentID": user_id,
             "name": name,
             "password": password,
             "hobbie": hobbie
