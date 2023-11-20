@@ -19,13 +19,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <th:block th:each="cadastro : ${cadastros}">
+                    {% for user in users %}
                         <tr>
-                            <td th:text="${cadastro.name()}"></td>
-                            <td th:text="${cadastro.hobbie()}"></td>
+                            <td>{{user.name}}</td>
+                            <td>{{user.hobbie}}</td>
                         </tr>
-                    </th:block>
-
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
