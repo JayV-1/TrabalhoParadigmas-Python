@@ -6,7 +6,11 @@ from app.utils.utilities import check_fields
 
 @app.route("/")
 def home():
-    return render_template('index.html', users=get_all_users())
+    data = {
+        "Users": get_all_users(),
+        "message": ""
+    }
+    return render_template('index.html', data=data)
 
 
 @app.route("/", methods=["POST"])
@@ -16,13 +20,25 @@ def handle_form():
     hobbie = request.form.get('hobbie')
 
     if not check_fields(name, password, hobbie):
-        return render_template('indexEmpty.html')
+        data = {
+            "Users": get_all_users(),
+            "message": "Campos em branco, por favor, preencha todos."
+        }
+        return render_template('index.html', data=data)
 
     user = get_specific_user(name, password)
 
     if not user is None:
         update_hobbie(user["documentID"], hobbie)
-        return render_template('index.html', users=get_all_users())
+        data = {
+            "Users": get_all_users(),
+            "message": "Usuário atualizado com sucesso!"
+        }
+        return render_template('index.html', data=data)
 
+    data = {
+        "Users": get_all_users(),
+        "message": "Usuário criado com sucesso!"
+    }
     uploadUser(name, password, hobbie)
-    return render_template('index.html', users=get_all_users())
+    return render_template('index.html', data=data)
