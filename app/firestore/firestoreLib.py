@@ -3,10 +3,14 @@ from google.cloud.firestore_v1 import FieldFilter
 from app.firestore.firestoreInit import db, usersCollection
 
 
-def uploadUser(data):
+def uploadUser(name, password, hobbie):
     try:
         doc_ref = usersCollection.document("users")
-        doc_ref.set(data)
+        doc_ref.set({
+            "name": name,
+            "password": password,
+            "hobbie": hobbie
+        })
     except Exception as e:
         print(e)
 
@@ -38,8 +42,18 @@ def get_specific_user(name, password):
         for doc in docs:
             user = doc.to_dict()
 
-        print(user)
         return user
+
+    except Exception as e:
+        print(e)
+
+
+def update_hobbie(id, hobbie):
+    try:
+        user_ref = usersCollection.document(id)
+        user_ref.update({
+            "hobbie": hobbie
+        })
 
     except Exception as e:
         print(e)
