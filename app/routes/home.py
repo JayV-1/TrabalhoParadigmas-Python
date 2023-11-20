@@ -19,10 +19,11 @@ def handle_form():
     password = request.form.get('password')
     hobbie = request.form.get('hobbie')
 
-    if not check_fields(name, password, hobbie):
+    fields_check_result = check_fields(name, password, hobbie)
+    if not fields_check_result == True:
         data = {
             "Users": get_all_users(),
-            "message": "Campos em branco, por favor, preencha todos."
+            "message": fields_check_result
         }
         return render_template('index.html', data=data)
 
