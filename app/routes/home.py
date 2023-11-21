@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, request
-from app.firestore.firestoreLib import get_all_users, get_specific_user, update_hobbie, uploadUser
+from app.firestore.firestoreLib import get_all_users, get_specific_user, update_hobbie, uploadUser, verify_username 
 from app.utils.utilities import check_fields
 
 
@@ -19,12 +19,12 @@ def handle_form():
     password = request.form.get('password')
     hobbie = request.form.get('hobbie')
 
-    fields_check_result = check_fields(name, password, hobbie)
-    if not fields_check_result == True:
+    if not check_fields(name, password, hobbie):
         data = {
             "Users": get_all_users(),
-            "message": fields_check_result
+            "message": "Campos em branco, por favor, preencha todos."
         }
+
         return render_template('index.html', data=data)
 
     user = get_specific_user(name, password)
@@ -37,9 +37,20 @@ def handle_form():
         }
         return render_template('index.html', data=data)
 
+    username_exists = verify_username(name)
+
+    if username_exists:
+        data = {
+            "Users": get_all_users(),
+            "message": "nome de usuário existe!"
+        }
+        
+        return render_template('index.html', data=data)
+
+    uploadUser(name, password, hobbie)
     data = {
         "Users": get_all_users(),
         "message": "Usuário criado com sucesso!"
     }
-    uploadUser(name, password, hobbie)
+
     return render_template('index.html', data=data)

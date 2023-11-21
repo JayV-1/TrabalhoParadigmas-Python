@@ -34,6 +34,26 @@ def get_all_users():
         print(e)
 
 
+# vê se existe o usuário existe
+def verify_username(name):
+    try:
+        docs = (usersCollection
+                .where(filter=FieldFilter("name", "==", name))
+                .limit(1)
+                .stream())
+
+        for doc in docs:
+            user = doc.to_dict()
+
+        if not user == None:
+            return True
+        else:
+            return False
+
+    except Exception as e:
+        print(e)
+
+
 def get_specific_user(name, password):
     try:
         docs = ((usersCollection
